@@ -1,5 +1,7 @@
 # sunday-test-3d
 
+Тестовый проект для Sunday Game Studio.
+
 ## Управление:
 * Передвижение: Используйте зону для передвижения на левой стороне экрана.
 * Вращение камерой: Используйте зону для поворота камеры на правой стороне экрана.
@@ -9,6 +11,8 @@
 
 
 ----------------------------------------------
+
+Test project for Sunday Game Studio.
 
 ## Controls:
 * Movement: Use the movement zone on the left side of the screen.
