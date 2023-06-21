@@ -5,20 +5,19 @@ using UnityEngine.Events;
 public class UIVirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
     [System.Serializable]
-    public class Event : UnityEvent<Vector2> { }
-    
-    [Header("Rect References")]
-    public RectTransform containerRect;
+    public class Event : UnityEvent<Vector2>
+    {
+    }
+
+    [Header("Rect References")] public RectTransform containerRect;
     public RectTransform handleRect;
 
-    [Header("Settings")]
-    public float joystickRange = 50f;
+    [Header("Settings")] public float joystickRange = 50f;
     public float magnitudeMultiplier = 1f;
     public bool invertXOutputValue;
     public bool invertYOutputValue;
 
-    [Header("Output")]
-    public Event joystickOutputEvent;
+    [Header("Output")] public Event joystickOutputEvent;
 
     void Start()
     {
@@ -27,7 +26,7 @@ public class UIVirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
 
     private void SetupHandle()
     {
-        if(handleRect)
+        if (handleRect)
         {
             UpdateHandleRectPosition(Vector2.zero);
         }
@@ -40,31 +39,30 @@ public class UIVirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
 
     public void OnDrag(PointerEventData eventData)
     {
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(containerRect, eventData.position,
+            eventData.pressEventCamera, out Vector2 position);
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(containerRect, eventData.position, eventData.pressEventCamera, out Vector2 position);
-        
         position = ApplySizeDelta(position);
-        
+
         Vector2 clampedPosition = ClampValuesToMagnitude(position);
 
-        Vector2 outputPosition = ApplyInversionFilter(position);
+        Vector2 outputPosition = ApplyInversionFilter(clampedPosition);
 
         OutputPointerEventValue(outputPosition * magnitudeMultiplier);
 
-        if(handleRect)
+        if (handleRect)
         {
             UpdateHandleRectPosition(clampedPosition * joystickRange);
         }
-        
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         OutputPointerEventValue(Vector2.zero);
 
-        if(handleRect)
+        if (handleRect)
         {
-             UpdateHandleRectPosition(Vector2.zero);
+            UpdateHandleRectPosition(Vector2.zero);
         }
     }
 
@@ -80,8 +78,8 @@ public class UIVirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
 
     Vector2 ApplySizeDelta(Vector2 position)
     {
-        float x = (position.x/containerRect.sizeDelta.x) * 2.5f;
-        float y = (position.y/containerRect.sizeDelta.y) * 2.5f;
+        float x = (position.x / containerRect.sizeDelta.x) * 2.5f;
+        float y = (position.y / containerRect.sizeDelta.y) * 2.5f;
         return new Vector2(x, y);
     }
 
@@ -92,12 +90,12 @@ public class UIVirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
 
     Vector2 ApplyInversionFilter(Vector2 position)
     {
-        if(invertXOutputValue)
+        if (invertXOutputValue)
         {
             position.x = InvertValue(position.x);
         }
 
-        if(invertYOutputValue)
+        if (invertYOutputValue)
         {
             position.y = InvertValue(position.y);
         }
@@ -109,5 +107,4 @@ public class UIVirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
     {
         return -value;
     }
-    
 }
