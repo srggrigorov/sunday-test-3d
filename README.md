@@ -1,4 +1,5 @@
 # sunday-test-3d
+## Unity 2021.3.10
 
 Тестовый проект для Sunday Game Studio.
 
